@@ -9,15 +9,18 @@ const getDogData = () => {
     });
 };
 
-getDogData().then(async data => {
-    fetch(`https://dog.ceo/api/breed/${data}/images/random`, {
-        method: 'GET'
-    }).then(async result => {
-        const jsonRes = await result.json();
+const dogData = async () => {
 
-        fs.writeFile('./dogfile.txt', jsonRes.message, (err, res) => {
-            if (err) console.log("failed to write data to file");
-            console.log('data written to file successfully!');
-        })
+    const data = await getDogData();
+    const result = await fetch(`https://dog.ceo/api/breed/${data}/images/random`, {
+        method: 'GET'
     });
-});
+
+    const jsonRes=await result.json();
+    fs.writeFile('./dogfile.txt', jsonRes.message, (err, res) => {
+        if (err) console.log("failed to write data to file");
+        console.log('data written to file successfully!');
+    })
+};
+
+console.log(dogData());
